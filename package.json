@@ -2,9 +2,10 @@
   "name": "learn-express",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "workshop/server.js",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon workshop/server.js"
   },
   "keywords": [],
   "author": "Oliver Phillips <hello@oliverjam.es> (https://oliverjam.es/)",
