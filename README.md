@@ -191,3 +191,105 @@ server.use(express.static("workshop/public"));
 ```
 
 </details>
+
+## Cookies
+
+Express makes working with cookies easier, as we don't have to manually write or parse the cookie headers. Let's add fake user authentication to our site.
+
+### Setting cookies
+
+Create new routes for `GET /log-in` and `POST /log-in`. The `GET` route should render `templates.logIn` (which contains a login form). The `POST` route needs to parse the request body to receive the user's submitted email. It should then redirect back to `/`.
+
+We could add the `express.urlencoded` middleware to this route, but since we now need body parsing in two places it's easier to enable it for all routes. Use `server.use` to add the middleware to the entire app.
+
+**Important**: Express runs handlers in the order you register them. Since our body parsing middleware needs to run _before_ any of our route handlers (otherwise they wouldn't have access to `req.body`) we need to register the middleware above all our other routes.
+
+<details>
+<summary>Solution</summary>
+
+```js
+server.use(express.urlencoded());
+
+// other routes
+
+server.get("/log-in", (req, res) => {
+  const html = templates.logIn();
+  res.send(html);
+});
+
+server.post("/log-in", (req, res) => {
+  const email = req.body.email;
+  console.log("email");
+  res.redirect("/");
+});
+```
+
+</details>
+
+Our `POST` handler needs to set a cookie containing the submitted email. This is how we'll know if a user is logged in. Express provides the `res.cookie` method for this. The first argument is the name of the cookie, the second is the value and the third is an object containing any options (including `maxAge`).
+
+Use `res.cookie` to set a cookie named "email" with the value of the submitted email, that expires in 600000ms (10 mins).
+
+<details>
+<summary>Solution</summary>
+
+```js
+server.post("/log-in", (req, res) => {
+  const email = req.body.email;
+  res.cookie("email", email, { maxAge: 600000 });
+  res.redirect("/");
+});
+```
+
+</details>
+
+You should now be able to see a cookie added in devtools after you submit the log in form.
+
+### Reading cookies
+
+Now we need to read the email cookie in our home handler. We can access the raw string containing all cookies on as `req.headers.cookie`. This isn't very easy to work with, so it's a good idea to use the `cookie-parser` middleware. This isn't built-in to Express, so we need to install it with npm.
+
+Once installed you can `require` it, then add it to your app with `server.use` like the other middleware. This will automatically parse incoming cookie headers into a convenient object on `req.cookie`.
+
+Change the `GET /` handler to read the email cookie and pass it in to the template like this: `templates.home(email)`. The template will render a welcome message for the user if the email is passed.
+
+<details>
+<summary>Solution</summary>
+
+```js
+const cookieParser = require("cookie-parser");
+
+server.use(cookieParser());
+
+server.get("/", (req, res) => {
+  const email = req.cookies.email;
+  const html = templates.home(email);
+  res.send(html);
+});
+```
+
+</details>
+
+You should now see a welcome message with your email once you submit the log in form.
+
+### Removing cookies
+
+Finally we need to allow users to log out and remove the cookie. Add a `GET /log-out` route. Express provides a `res.removeCookie` method that takes the name of the cookie you want to remove as an argument. Use this to remove the email cookie, then redirect to the homepage.
+
+<details>
+<summary>Solution</summary>
+
+```js
+server.get("/log-out", (req, res) => {
+  res.removeCookie("email");
+  res.redirect("/");
+});
+```
+
+</details>
+
+Now the log out link should clear your cookie and send you back to the "logged out" view of the homepage.
+
+## Stretch goal
+
+Currently users can create posts with any name. Use the email cookie to ensure that only logged in users can access the `GET /new-post` route. Remove the "name" input and instead use the user's email to fill the post's author field.
