@@ -293,3 +293,5 @@ Now the log out link should clear your cookie and send you back to the "logged o
 ## Stretch goal
 
 Currently users can create posts with any name. Use the email cookie to ensure that only logged in users can access the `GET /new-post` route. Remove the "name" input and instead use the user's email to fill the post's author field.
+
+Remember you can set a status code for your response like this: `res.status(401).send("<h1>nuh uh</h1>")`.
