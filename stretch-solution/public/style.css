@@ -1,0 +1,62 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  background-color: #000;
+  color: #fff;
+  font-family: Consolas, monaco, monospace;
+}
+
+label,
+input,
+textarea,
+button {
+  display: block;
+  font: inherit;
+}
+
+label,
+button {
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+input,
+textarea {
+  width: 100%;
+  margin-top: 0.5rem;
+  border: 0;
+  padding: 0.5rem;
+}
+
+input:focus,
+textarea:focus {
+  outline: 2px solid yellow;
+}
+
+textarea {
+  resize: vertical;
+}
+
+button {
+  border: 0;
+  padding: 0.75rem 1rem;
+  background-color: yellow;
+}
+
+a {
+  color: yellow;
+}
+
+nav > a + a {
+  margin-left: 1rem;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
