@@ -1,4 +1,5 @@
 const express = require("express");
+const cookieParser = require("cookie-parser");
 const PORT = process.env.PORT || 3000;
 const templates = require("./templates");
 
@@ -6,8 +7,12 @@ const server = express();
 
 let posts = [{ author: "oli", title: "hello", content: "lorem ipsum etc" }];
 
+server.use(cookieParser());
+server.use(express.urlencoded());
+
 server.get("/", (req, res) => {
-  const html = templates.home();
+  const email = req.cookies.email;
+  const html = templates.home(email);
   res.send(html);
 });
 
@@ -21,7 +26,7 @@ server.get("/posts", (req, res) => {
   res.send(html);
 });
 
-server.post("/new-post", express.urlencoded(), (req, res) => {
+server.post("/new-post", (req, res) => {
   const newPost = req.body;
   posts.push(newPost);
   res.redirect("/posts");
@@ -36,6 +41,22 @@ server.get("/posts/:title", (req, res) => {
 server.get("/delete-post/:title", (req, res) => {
   posts = posts.filter((p) => p.title !== req.params.title);
   res.redirect("/posts");
+});
+
+server.get("/log-in", (req, res) => {
+  const html = templates.logIn();
+  res.send(html);
+});
+
+server.post("/log-in", (req, res) => {
+  const email = req.body.email;
+  res.cookie("email", email, { maxAge: 600000 });
+  res.redirect("/");
+});
+
+server.get("/log-out", (req, res) => {
+  res.clearCookie("email");
+  res.redirect("/");
 });
 
 server.use(express.static("workshop/public"));

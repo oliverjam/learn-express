@@ -22,10 +22,18 @@ function layout(content) {
   `;
 }
 
-function home() {
-  return layout(/*html */ `
-    <h1>Learn Express</h1>
-  `);
+function home(email) {
+  if (email) {
+    return layout(/*html */ `
+      <h1>Welcome back ${email}</h1>
+      <a href="/log-out">Log out</a>
+    `);
+  } else {
+    return layout(/*html */ `
+      <h1>Learn Express</h1>
+      <a href="/log-in">Log in</a>
+    `);
+  }
 }
 
 function newPost() {
@@ -76,4 +84,17 @@ function post(post) {
   `);
 }
 
-module.exports = { home, newPost, allPosts, post };
+function logIn() {
+  return layout(/*html */ `
+    <h1>Log in to your account</h1>
+    <form action="/log-in" method="POST">
+      <label for="email">
+        Your email<span aria-hidden="true">*</span>
+      </label>
+      <input id="author" type="email" name="email" required>
+      <button type="submit">Log in</button>
+    </form>
+  `);
+}
+
+module.exports = { home, newPost, allPosts, post, logIn };
