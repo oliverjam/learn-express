@@ -198,7 +198,7 @@ server.use(express.static("workshop/public"));
 
 Express makes working with cookies easier, as we don't have to manually write or parse the cookie headers. Let's add fake user authentication to our site.
 
-### Setting cookies
+### Setting cookies
 
 Create new routes for `GET /log-in` and `POST /log-in`. The `GET` route should render `templates.logIn` (which contains a login form). The `POST` route needs to parse the request body to receive the user's submitted email. It should then redirect back to `/`.
 
