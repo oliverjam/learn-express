@@ -27,6 +27,12 @@ server.post("/new-post", express.urlencoded(), (req, res) => {
   res.redirect("/posts");
 });
 
+server.get("/posts/:title", (req, res) => {
+  const post = posts.find((p) => p.title === req.params.title);
+  const html = templates.post(post);
+  res.send(html);
+});
+
 server.get("/delete-post/:title", (req, res) => {
   posts = posts.filter((p) => p.title !== req.params.title);
   res.redirect("/posts");
