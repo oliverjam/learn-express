@@ -41,7 +41,7 @@ server.get("/", (req, res) => {
 });
 ```
 
-Visit http://localhost:3000 and you'll see a title and links to other pages. These pages don't exist yet, so we'll have to add handlers for them.
+Visit http://localhost:3000 and you'll see a title and links to other pages (don't worry about the "Log in" link for now). These pages don't exist yet, so we'll have to add handlers for them.
 
 Create a new route for `GET /new-post` that renders `templates.newPost`.
 
@@ -183,6 +183,8 @@ Previously we added middleware to a single route (`POST /new-post`). However her
 
 Add the static file handling middleware to your app. When you refresh the page you should see some styles take affect.
 
+![Style homepage](https://user-images.githubusercontent.com/9408641/78917842-5f85cf80-7a87-11ea-9040-2e4f7c02de08.png)
+
 <details>
 <summary>Solution</summary>
 
@@ -290,8 +292,12 @@ server.get("/log-out", (req, res) => {
 
 Now the log out link should clear your cookie and send you back to the "logged out" view of the homepage.
 
+![solution](https://user-images.githubusercontent.com/9408641/78917671-23eb0580-7a87-11ea-9365-cb79dec17347.gif)
+
 ## Stretch goal
 
 Currently users can create posts with any name. Use the email cookie to ensure that only logged in users can access the `GET /new-post` route. Remove the "name" input and instead use the user's email to fill the post's author field.
 
 Remember you can set a status code for your response like this: `res.status(401).send("<h1>nuh uh</h1>")`.
+
+![stretch solution](https://user-images.githubusercontent.com/9408641/78917682-25b4c900-7a87-11ea-9de4-bfa3483154cf.gif)
