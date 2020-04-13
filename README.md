@@ -163,7 +163,7 @@ Add another handler for `GET /delete-post` that uses a route param to get the ti
 <summary>Solution</summary>
 
 ```js
-server.get("/delete-post/:id", (req, res) => {
+server.get("/delete-post/:title", (req, res) => {
   posts = posts.filter((p) => p.title !== req.params.title);
   res.redirect("/posts");
 });
