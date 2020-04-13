@@ -276,14 +276,14 @@ You should now see a welcome message with your email once you submit the log in 
 
 ### Removing cookies
 
-Finally we need to allow users to log out and remove the cookie. Add a `GET /log-out` route. Express provides a `res.removeCookie` method that takes the name of the cookie you want to remove as an argument. Use this to remove the email cookie, then redirect to the homepage.
+Finally we need to allow users to log out and remove the cookie. Add a `GET /log-out` route. Express provides a `res.clearCookie` method that takes the name of the cookie you want to remove as an argument. Use this to remove the email cookie, then redirect to the homepage.
 
 <details>
 <summary>Solution</summary>
 
 ```js
 server.get("/log-out", (req, res) => {
-  res.removeCookie("email");
+  res.clearCookie("email");
   res.redirect("/");
 });
 ```
