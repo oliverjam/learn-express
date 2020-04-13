@@ -251,7 +251,7 @@ You should now be able to see a cookie added in devtools after you submit the lo
 
 Now we need to read the email cookie in our home handler. We can access the raw string containing all cookies on as `req.headers.cookie`. This isn't very easy to work with, so it's a good idea to use the `cookie-parser` middleware. This isn't built-in to Express, so we need to install it with npm.
 
-Once installed you can `require` it, then add it to your app with `server.use` like the other middleware. This will automatically parse incoming cookie headers into a convenient object on `req.cookie`.
+Once installed you can `require` it, then add it to your app with `server.use` like the other middleware. This will automatically parse incoming cookie headers into a convenient object on `req.cookies`.
 
 Change the `GET /` handler to read the email cookie and pass it in to the template like this: `templates.home(email)`. The template will render a welcome message for the user if the email is passed.
 
