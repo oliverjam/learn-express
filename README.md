@@ -3,18 +3,16 @@
 Express is a minimal framework for building web applications in Node. It would be helpful to read the [Express Introduction](https://github.com/oliverjam/express-intro) first. This workshop will introduce a few Express features that make building servers easier:
 
 1. Routing
-1. Dynamic route params
+1. Route parameters
 1. Middleware
 
 ## Setup
 
-We'll be building a basic blogging app that lets you submit posts, view a list of all posts, view individual posts, and delete individual postsf.
+We'll be building a basic blogging app that lets you submit posts, view a list of all posts, view individual posts, and delete individual posts.
 
 1. Clone this repo
 1. Run `npm install` to install dependencies
 1. Run `npm run dev` to start the auto-reloading server
-
-The only dependencies are Express and Nodemon—everything we'll be using comes out of the box with Express.
 
 If you open `workshop/server.js` you should see an Express server being created. It currently has no routes, so if you visit http://localhost:3000 you'll see a `404` page.
 
@@ -24,7 +22,7 @@ All the HTML we need is already written in `workshop/templates.js`. We'll be foc
 
 ## Serving pages
 
-Express makes it easy to handle requests for different URLs. We can add routes by calling HTTP method functions on the server object. For example let's create a handler for the `GET /` route:
+Express makes it easy to handle requests for different URLs. We can add routes by calling functions on the server object. For example let's create a handler for the `GET /` route:
 
 ```js
 server.get("/", (req, res) => {
@@ -64,7 +62,7 @@ server.get("/posts", (req, res) => {
 
 </details>
 
-If you visit http://localhost:3000/new-post you should see the form for creating new posts. If you visit http://localhost:3000/posts you should see the single example post.
+If you visit http://localhost:3000/new-post you should see the form for creating new posts. If you visit http://localhost:3000/posts you should see the example post.
 
 ## Handling form submissions
 
@@ -80,7 +78,7 @@ Now we need to access the POST request body. In a vanilla Node server this would
 
 ### Middleware
 
-Express middleware are handler functions that can be chained together. They transform the request in some way, then pass it on to the next handler. There are built-in middleware functions, 3rd party ones and you can even write your own.
+Express middleware are handler functions that can be chained together. They transform the request in some way, then pass it on to the next handler. There are built-in middleware functions, 3rd party ones, and you can even write your own.
 
 Express routes can actually take as many handler arguments as you like after the path argument:
 
@@ -90,9 +88,11 @@ server.get("/", handlerOne, handlerTwo, handlerThree);
 
 ### Body parsing
 
-Express has built-in middleware functions for parsing POST bodies. Since there are lots of common formats for POST request we need to pick the right one. This is an HTML form submission, which means the `content-type` will be `x-www-form-urlencoded` (e.g. a string like this: `name=oli&title=hello&content=rtest`).
+Express has built-in middleware functions for parsing POST bodies. Since there are lots of common formats for POST request we need to pick the right one.
 
-All the built-in middleware are properties of the `express` object we imported. In this case we want `express.urlencoded`. This is a function we have to call (and pass in any options) that _returns_ the middleware function:
+Our app uses an HTML form submission, which means the `content-type` will be `x-www-form-urlencoded` (e.g. a string like this: `name=oli&title=hello&content=rtest`).
+
+All the built-in middleware are methods of the `express` object we imported. In this case we want `express.urlencoded`. This is a function we have to call (and pass in any options) that _returns_ the middleware function:
 
 ```js
 server.post("/new-post", express.urlencoded(), (req, res) => {
@@ -153,11 +153,18 @@ Add this handler, then click each post in the list on `/posts`. You should see a
 
 ### Deleting posts
 
-Each post in the list also has a delete anchor tag (with a bin icon), which links to something like `/delete-post/hello`.
+Each post in the list also has a delete anchor tag, which links to something like `/delete-post/hello`.
 
 Add another handler for `GET /delete-post` that uses a route param to get the title of the post to delete. It should then remove that post from the `posts` array and redirect back to the `/posts` page.
 
 **Note**: we are using the `GET` method here, not `DELETE`, because you can only send `DELETE` requests using client-side JS (with `fetch`). Using a link is simpler.
+
+<details>
+<summary>Hint</summary>
+
+You can use the `posts.filter` method to remove a post
+
+</details>
 
 <details>
 <summary>Solution</summary>
@@ -249,11 +256,15 @@ You should now be able to see a cookie added in devtools after you submit the lo
 
 ### Reading cookies
 
-Now we need to read the email cookie in our home handler. We can access the raw string containing all cookies on as `req.headers.cookie`. This isn't very easy to work with, so it's a good idea to use the `cookie-parser` middleware. This isn't built-in to Express, so we need to install it with npm.
+Now we need to read the email cookie in our home handler. We can access the raw string containing all cookies on `req.headers.cookie`, but this isn't very easy to work with. It's a good idea to use the `cookie-parser` middleware. This isn't built-in to Express, so we need to install it with npm.
+
+```
+npm i cookie-parser
+```
 
 Once installed you can `require` it, then add it to your app with `server.use` like the other middleware. This will automatically parse incoming cookie headers into a convenient object on `req.cookies`.
 
-Change the `GET /` handler to read the email cookie and pass it in to the template like this: `templates.home(email)`. The template will render a welcome message for the user if the email is passed.
+Change the `GET /` handler to read the email cookie and pass it in to the template like this: `templates.home(email)`. The template will render a welcome message for the user if there's an email.
 
 <details>
 <summary>Solution</summary>
