@@ -11,7 +11,7 @@
   "author": "Oliver Phillips <hello@oliverjam.es> (https://oliverjam.es/)",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.4"
   },
   "dependencies": {
     "express": "^4.17.1"
